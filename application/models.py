@@ -19,7 +19,7 @@ ApplicantStatus = [
     ('distributed', 'распределена в группу'),
 ]
 
-GroupCourse = Enum('GroupCourse', 'python vue django php html')
+GroupCourse = Enum('GroupCourse', ['python', 'vue', 'django', 'php', 'html'])
 
 
 class User(db.Model):
