@@ -1,17 +1,18 @@
 from flask import Flask
-from flask_migrate import Migrate
 
 from config import Config
+from application.extensions import db, migrate, admin_manager
 
 app = Flask(__name__)
 
 
 def create_app(config_class=Config):
     app.config.from_object(config_class)
-    from . import routes, forms
-    from . models import db
-    from . admin import admin
+    from application import routes, forms
+    from application.models import db
+    from application.admin import init_admin
     db.init_app(app)
-    migrate = Migrate()
     migrate.init_app(app, db)
+    admin_manager.init_app(app)
+    init_admin(admin_manager)
     return app

@@ -1,9 +1,8 @@
 from enum import Enum
 
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import ChoiceType
 
-db = SQLAlchemy()
+from application.extensions import db
 
 GroupStatus = [
     ('enroll', 'набирается'),
@@ -29,6 +28,9 @@ class User(db.Model):
     mail = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Group(db.Model):
     __tablename__ = 'groups'
@@ -38,6 +40,9 @@ class Group(db.Model):
     course = db.Column(ChoiceType(GroupCourse, impl=db.Integer()), nullable=False)
     start = db.Column(db.DateTime, nullable=False)
     applicants = db.relationship("Applicant", back_populates="group")
+
+    def __str__(self):
+        return f'{self.title}'
 
 
 class Applicant(db.Model):
@@ -49,3 +54,6 @@ class Applicant(db.Model):
     status = db.Column(ChoiceType(ApplicantStatus), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"))
     group = db.relationship("Group", back_populates="applicants")
+
+    def __str__(self):
+        return f'{self.name}'
