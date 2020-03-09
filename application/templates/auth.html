@@ -2,38 +2,56 @@
 <html lang="ru">
 
 <head>
-  <title>Authorisation | Touradmin</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Authorization | Touradmin</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <main class="container">
+<main class="container">
     <div class="row">
-      <div class="col-8 col-lg-4 offset-2 offset-lg-4">
-        <form class="form-signin pt-5 mt-5">
-          <div class="text-center m-6 b-1">
-            <h1 class="h3 mb-3 font-weight-normal">Stepik CRM</h1>
-            <p class="mb-4">Что-то мы вас не узнали</p>
-          </div>
+        <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+            <form class="form-signin pt-5 mt-5" action="{{ url_for('post_login', next=request.args.get('next')) }}"
+                  method="post">
+                {{ form.csrf_token }}
+                <div class="text-center m-6 b-1">
+                    <h1 class="h3 mb-3 font-weight-normal">Stepik CRM</h1>
+                    <p class="mb-4">Что-то мы вас не узнали</p>
+                </div>
 
-          <p class="alert alert-danger text-center">Неверный логин или пароль</p>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} text-center alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ message }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
 
-          <div class="form-label-group">
-            <p class="text-muted">Электропочта</p>
-            <input type="email" id="inputEmail" class="form-control" required autofocus>
-            <label for="inputEmail"></label>
-          </div>
-          <div class="form-label-group">
-            <p class="text-muted">Пароль</p>
-            <input type="password" id="inputPassword" class="form-control" required>
-            <label for="inputPassword"></label>
-          </div>
-          <div class="checkbox mb-3"> </div>
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-        </form>
-      </div>
+                <div class="form-label-group mb-4">
+                    <p class="text-muted">Электропочта</p>
+                    {{ form.email(class="form-control", autofocus=autofocus) }}
+                </div>
+                <div class="form-label-group mb-3">
+                    <p class="text-muted">Пароль</p>
+                    {{ form.password(type='password', class="form-control") }}
+                </div>
+                <div class="checkbox mb-3">
+                    {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+                </div>
+            </form>
+        </div>
     </div>
-  </main>
+</main>
 </body>
 </html>

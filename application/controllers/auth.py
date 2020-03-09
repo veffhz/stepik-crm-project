@@ -20,11 +20,11 @@ def post_login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if not user or not user.check_password(form.password.data):
-            flash('Error')
+            flash('Неверный логин или пароль', 'danger')
             return redirect(url_for('login'))
         login_user(user)
         next = request.args.get('next')
-        flash('Logged in successfully')
+        flash('Успешный вход', 'success')
         return redirect(next or url_for('main'))
     return render_template('auth.html', form=form)
 

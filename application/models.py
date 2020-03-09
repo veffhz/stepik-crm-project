@@ -1,6 +1,7 @@
 from enum import Enum
 
 from sqlalchemy import event
+from flask_login import UserMixin
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -23,7 +24,7 @@ ApplicantStatus = [
 GroupCourse = Enum('GroupCourse', ['python', 'vue', 'django', 'php', 'html'])
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
