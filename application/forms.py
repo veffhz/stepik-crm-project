@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, Email
 from wtforms import StringField, SubmitField
 
 
-class BookingForm(FlaskForm):
-    name = StringField(validators=[InputRequired()])
-    submit = SubmitField('booking_submit')
+class LoginForm(FlaskForm):
+    email = StringField(validators=[InputRequired(), Email()])
+    password = StringField(validators=[InputRequired()])
+    submit = SubmitField('submit')
 
 
 class RequestForm(FlaskForm):

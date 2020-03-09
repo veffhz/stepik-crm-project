@@ -1,12 +1,7 @@
 from werkzeug import exceptions
-from flask import render_template, redirect
+from flask import render_template
 
 from application import app
-
-
-@app.route('/')
-def main():
-    return redirect('admin')
 
 
 @app.errorhandler(exceptions.NotFound)
