@@ -1,41 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Stepik CRM</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous">
-</head>
-<body>
+{% extends 'admin/master.html' %}
 
+{% block title %}Stepik CRM{% endblock %}
+
+{% block body %}
 <div class="container" style="margin-top:50px">
-
-
     <div class="row">
         <div class="col-md-6">
             <div class="well">
-
                 <h2>Заявки</h2>
-                <p>150 всего 95 распределены 65 не распределены</p>
-
+                <p><strong>{{ applicants_data.length }}</strong> всего,
+                    <strong>{{ applicants_data.diff }}</strong> распределены,
+                    <strong>{{ applicants_data.news }}</strong> не распределены</p>
                 <h3>Новые заявки</h3>
                 <table class="table">
+                    {% for applicant in applicants_data.new_applicants %}
                     <tr>
-                        <td><a href="/">Vue js январь</a></td>
-                        <td>8 / 10 набрано</td>
-                        <td>есть места</td>
+                        <td><a href="applicant/edit/?id={{ applicant.id }}">{{ applicant.group.title }}</a></td>
+                        <td>{{ applicant.group.applicants_count }} / {{ applicant.group.seats }} набрано</td>
+                        {% if applicant.group.is_complete %}
+                            <td>Нет мест</td>
+                        {% else %}
+                            <td>есть места</td>
+                        {% endif %}
                     </tr>
-                    <tr>
-                        <td><a href="/">Flask февраль</a></td>
-                        <td>10 / 10 набрано</td>
-                        <td>нет мест</td>
-                    </tr>
-                    <tr>
-                        <td><a href="/">Django февраль</a></td>
-                        <td>6 / 10 набрано</td>
-                        <td>есть места</td>
-                    </tr>
+                    {% endfor %}
                 </table>
                 <br>
                 <a href="" class></a>
@@ -43,33 +31,23 @@
         </div>
         <div class="col-md-6">
             <div class="well">
-
                 <h2>Группы</h2>
                 <br>
                 <table class="table">
+                    {% for group in groups %}
                     <tr>
-                        <td><a href="/">Vue js январь</a></td>
-                        <td>8 / 10 набрано</td>
-                        <td>есть места</td>
+                        <td><a href="group/edit/?id={{ group.id }}">{{group.title}}</a></td>
+                        <td>{{ group.applicants_count }} / {{ group.seats }} набрано</td>
+                        {% if group.is_complete %}
+                            <td>Нет мест</td>
+                        {% else %}
+                            <td>есть места</td>
+                        {% endif %}
                     </tr>
-                    <tr>
-                        <td><a href="/">Flask февраль</a></td>
-                        <td>10 / 10 набрано</td>
-                        <td>нет мест</td>
-                    </tr>
-                    <tr>
-                        <td><a href="/">Django февраль</a></td>
-                        <td>6 / 10 набрано</td>
-                        <td>есть места</td>
-                    </tr>
+                    {% endfor %}
                 </table>
-
             </div>
         </div>
     </div>
-
-
 </div>
-
-</body>
-</html>
+{% endblock %}

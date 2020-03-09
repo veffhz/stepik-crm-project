@@ -2,7 +2,7 @@ from flask import Flask
 
 from config import Config
 from application.extensions import db, migrate, csrf
-from application.extensions import admin_manager, login_manager
+from application.extensions import login_manager
 
 app = Flask(__name__)
 
@@ -16,8 +16,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     csrf.init_app(app)
     login_manager.init_app(app)
-    admin_manager.init_app(app)
-    init_admin(admin_manager)
+    init_admin(app)
     authentication(User)
     return app
 

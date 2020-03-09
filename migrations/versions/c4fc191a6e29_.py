@@ -36,10 +36,7 @@ def upgrade():
     sa.Column('status', ChoiceType(ApplicantStatus), nullable=False),
     sa.Column('group_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['group_id'], ['groups.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('name'),
-    sa.UniqueConstraint('phone')
+    sa.PrimaryKeyConstraint('id')
     )
 
 

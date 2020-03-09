@@ -5,6 +5,7 @@ from flask_login import UserMixin
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from application.exceptions import GroupLimitException
 from application.extensions import db
 
 GroupStatus = [
@@ -59,6 +60,14 @@ class Group(db.Model):
     seats = db.Column(db.Integer)
     applicants = db.relationship("Applicant", back_populates="group", lazy='joined')
 
+    @property
+    def is_complete(self):
+        return len(self.applicants) == self.seats
+
+    @property
+    def applicants_count(self):
+        return len(self.applicants)
+
     def __str__(self):
         return f'{self.title}'
 
@@ -66,12 +75,18 @@ class Group(db.Model):
 class Applicant(db.Model):
     __tablename__ = 'applicants'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    phone = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(80), nullable=False)
     status = db.Column(ChoiceType(ApplicantStatus), nullable=False)
     group_id = db.Column(db.Integer, db.ForeignKey("groups.id"))
     group = db.relationship("Group", back_populates="applicants", lazy='joined')
 
     def __str__(self):
         return f'{self.name}'
+
+
+@event.listens_for(Applicant, 'before_insert')
+def receive_before_insert(mapper, connection, target):
+    if target.group and target.group.applicants_count > target.group.seats:
+        raise GroupLimitException()
